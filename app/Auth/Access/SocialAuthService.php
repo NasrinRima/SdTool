@@ -46,6 +46,7 @@ class SocialAuthService
         'gitlab',
         'twitch',
         'discord',
+        'keycloak',
     ];
 
     /**
@@ -100,13 +101,18 @@ class SocialAuthService
     {
         // Check social account has not already been used
         if (SocialAccount::query()->where('driver_id', '=', $socialUser->getId())->exists()) {
-            throw new UserRegistrationException(trans('errors.social_account_in_use', ['socialAccount' => $socialDriver]), '/login');
+            throw new UserRegistrationException(
+                trans('errors.social_account_in_use', ['socialAccount' => $socialDriver]), '/login'
+            );
         }
 
         if (User::query()->where('email', '=', $socialUser->getEmail())->exists()) {
             $email = $socialUser->getEmail();
 
-            throw new UserRegistrationException(trans('errors.error_user_exists_different_creds', ['email' => $email]), '/login');
+            throw new UserRegistrationException(
+                trans('errors.error_user_exists_different_creds', ['email' => $email]),
+                '/login'
+            );
         }
 
         return $socialUser;
@@ -152,7 +158,10 @@ class SocialAuthService
         if ($isLoggedIn && $socialAccount === null) {
             $account = $this->newSocialAccount($socialDriver, $socialUser);
             $currentUser->socialAccounts()->save($account);
-            session()->flash('success', trans('settings.users_social_connected', ['socialAccount' => $titleCaseDriver]));
+            session()->flash(
+                'success',
+                trans('settings.users_social_connected', ['socialAccount' => $titleCaseDriver])
+            );
 
             return redirect($currentUser->getEditUrl());
         }
@@ -166,7 +175,10 @@ class SocialAuthService
 
         // When a user is logged in, A social account exists but the users do not match.
         if ($isLoggedIn && $socialAccount !== null && $socialAccount->user->id != $currentUser->id) {
-            session()->flash('error', trans('errors.social_account_already_used_existing', ['socialAccount' => $titleCaseDriver]));
+            session()->flash(
+                'error',
+                trans('errors.social_account_already_used_existing', ['socialAccount' => $titleCaseDriver])
+            );
 
             return redirect($currentUser->getEditUrl());
         }
@@ -194,7 +206,9 @@ class SocialAuthService
         }
 
         if (!$this->checkDriverConfigured($driver)) {
-            throw new SocialDriverNotConfigured(trans('errors.social_driver_not_configured', ['socialAccount' => Str::title($socialDriver)]));
+            throw new SocialDriverNotConfigured(
+                trans('errors.social_driver_not_configured', ['socialAccount' => Str::title($socialDriver)])
+            );
         }
 
         return $driver;
@@ -206,8 +220,12 @@ class SocialAuthService
     protected function checkDriverConfigured(string $driver): bool
     {
         $lowerName = strtolower($driver);
-        $configPrefix = 'services.' . $lowerName . '.';
-        $config = [config($configPrefix . 'client_id'), config($configPrefix . 'client_secret'), config('services.callback_url')];
+        $configPrefix = 'services.'.$lowerName.'.';
+        $config = [
+            config($configPrefix.'client_id'),
+            config($configPrefix.'client_secret'),
+            config('services.callback_url'),
+        ];
 
         return !in_array(false, $config) && !in_array(null, $config);
     }
@@ -233,7 +251,7 @@ class SocialAuthService
      */
     public function getDriverName(string $driver): string
     {
-        return config('services.' . strtolower($driver) . '.name');
+        return config('services.'.strtolower($driver).'.name');
     }
 
     /**
@@ -241,7 +259,7 @@ class SocialAuthService
      */
     public function driverAutoRegisterEnabled(string $driver): bool
     {
-        return config('services.' . strtolower($driver) . '.auto_register') === true;
+        return config('services.'.strtolower($driver).'.auto_register') === true;
     }
 
     /**
@@ -249,7 +267,7 @@ class SocialAuthService
      */
     public function driverAutoConfirmEmailEnabled(string $driver): bool
     {
-        return config('services.' . strtolower($driver) . '.auto_confirm') === true;
+        return config('services.'.strtolower($driver).'.auto_confirm') === true;
     }
 
     /**
@@ -258,9 +276,9 @@ class SocialAuthService
     public function newSocialAccount(string $socialDriver, SocialUser $socialUser): SocialAccount
     {
         return new SocialAccount([
-            'driver'    => $socialDriver,
+            'driver' => $socialDriver,
             'driver_id' => $socialUser->getId(),
-            'avatar'    => $socialUser->getAvatar(),
+            'avatar' => $socialUser->getAvatar(),
         ]);
     }
 
@@ -304,9 +322,9 @@ class SocialAuthService
         callable $configureForRedirect = null
     ) {
         $this->validSocialDrivers[] = $driverName;
-        config()->set('services.' . $driverName, $config);
-        config()->set('services.' . $driverName . '.redirect', url('/login/service/' . $driverName . '/callback'));
-        config()->set('services.' . $driverName . '.name', $config['name'] ?? $driverName);
+        config()->set('services.'.$driverName, $config);
+        config()->set('services.'.$driverName.'.redirect', url('/login/service/'.$driverName.'/callback'));
+        config()->set('services.'.$driverName.'.name', $config['name'] ?? $driverName);
         Event::listen(SocialiteWasCalled::class, $socialiteHandler);
         if (!is_null($configureForRedirect)) {
             $this->configureForRedirectCallbacks[$driverName] = $configureForRedirect;

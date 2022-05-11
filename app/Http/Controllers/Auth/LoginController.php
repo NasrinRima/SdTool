@@ -10,7 +10,10 @@ use BookStack\Facades\Activity;
 use BookStack\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Validation\ValidationException;
+use Laravel\Socialite\Facades\Socialite;
 
 class LoginController extends Controller
 {
@@ -250,5 +253,22 @@ class LoginController extends Controller
         }
 
         redirect()->setIntendedUrl($previous);
+    }
+
+    public function logout(Request $request)
+    {
+        $this->guard()->logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        if ($response = $this->loggedOut($request)) {
+            return $response;
+        }
+
+        Auth::logout(); // Logout of your app
+        $redirectUri = Config::get('app.url'); // The URL the user is redirected to
+        return redirect(Socialite::driver('keycloak')->getLogoutUrl($redirectUri));
     }
 }
