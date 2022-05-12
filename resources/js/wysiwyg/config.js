@@ -83,6 +83,7 @@ function gatherPlugins(options) {
         "about",
         "details",
         "tasklist",
+        'footnotes',
         options.textDirection === 'rtl' ? 'directionality' : '',
     ];
 
