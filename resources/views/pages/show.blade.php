@@ -1,6 +1,4 @@
 @extends('layouts.tri')
-<meta name="csrf-token" content="{{ csrf_token() }}"/>
-<meta name="mercure" content="{{ env('MERCURE_SUBSCRIBE_URL') }}">
 @push('social-meta')
     <meta property="og:description" content="{{ Str::limit($page->text, 100, '...') }}">
 

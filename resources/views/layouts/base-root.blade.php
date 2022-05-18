@@ -10,7 +10,7 @@
     <meta name="token" content="{{ csrf_token() }}">
     <meta name="base-url" content="{{ url('/') }}">
     <meta charset="utf-8">
-
+    <meta name="mercure" content="{{config('app.mercure_subscribe_url')}}">
     <!-- Social Cards Meta -->
     <meta property="og:title" content="{{ isset($pageTitle) ? $pageTitle . ' | ' : '' }}{{ setting('app-name') }}">
     <meta property="og:url" content="{{ url()->current() }}">
