@@ -37,6 +37,7 @@
     "dot": "^1.1.2",
     "dropzone": "^5.9.3",
     "es6-promise": "^4.2.8",
+    "eventsource-polyfill": "^0.9.6",
     "highlighter.js": "^1.0.0",
     "insert-css": "^2.0.0",
     "jquery": "^3.6.0",

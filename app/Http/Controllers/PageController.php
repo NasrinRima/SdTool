@@ -4,6 +4,7 @@ namespace BookStack\Http\Controllers;
 
 use BookStack\Actions\View;
 use BookStack\Entities\Models\Page;
+use BookStack\Entities\Models\PageRevision;
 use BookStack\Entities\Repos\PageRepo;
 use BookStack\Entities\Tools\BookContents;
 use BookStack\Entities\Tools\Cloner;
@@ -92,11 +93,11 @@ class PageController extends Controller
         $templates = $this->pageRepo->getTemplates(10);
 
         return view('pages.edit', [
-            'page'          => $draft,
-            'book'          => $draft->book,
-            'isDraft'       => true,
+            'page' => $draft,
+            'book' => $draft->book,
+            'isDraft' => true,
             'draftsEnabled' => $draftsEnabled,
-            'templates'     => $templates,
+            'templates' => $templates,
         ]);
     }
 
@@ -156,16 +157,21 @@ class PageController extends Controller
 
         View::incrementFor($page);
         $this->setPageTitle($page->getShortName());
+        $revision = PageRevision::query()->where('page_id', '=', $page->id)->where(
+            'revision_number',
+            $page->revision_count
+        )->pluck('id')->first();
 
         return view('pages.show', [
-            'page'            => $page,
-            'book'            => $page->book,
-            'current'         => $page,
-            'sidebarTree'     => $sidebarTree,
+            'page' => $page,
+            'book' => $page->book,
+            'current' => $page,
+            'sidebarTree' => $sidebarTree,
             'commentsEnabled' => $commentsEnabled,
-            'pageNav'         => $pageNav,
-            'next'            => $nextPreviousLocator->getNext(),
-            'previous'        => $nextPreviousLocator->getPrevious(),
+            'pageNav' => $pageNav,
+            'next' => $nextPreviousLocator->getNext(),
+            'previous' => $nextPreviousLocator->getPrevious(),
+            'revision' => $revision,
         ]);
     }
 
@@ -219,11 +225,11 @@ class PageController extends Controller
         $this->setPageTitle(trans('entities.pages_editing_named', ['pageName' => $page->getShortName()]));
 
         return view('pages.edit', [
-            'page'          => $page,
-            'book'          => $page->book,
-            'current'       => $page,
+            'page' => $page,
+            'book' => $page->book,
+            'current' => $page,
             'draftsEnabled' => $draftsEnabled,
-            'templates'     => $templates,
+            'templates' => $templates,
         ]);
     }
 
@@ -264,9 +270,9 @@ class PageController extends Controller
         $warnings = (new PageEditActivity($page))->getWarningMessagesForDraft($draft);
 
         return response()->json([
-            'status'    => 'success',
-            'message'   => trans('entities.pages_edit_draft_save_at'),
-            'warning'   => implode("\n", $warnings),
+            'status' => 'success',
+            'message' => trans('entities.pages_edit_draft_save_at'),
+            'warning' => implode("\n", $warnings),
             'timestamp' => $draft->updated_at->timestamp,
         ]);
     }
@@ -295,8 +301,8 @@ class PageController extends Controller
         $this->setPageTitle(trans('entities.pages_delete_named', ['pageName' => $page->getShortName()]));
 
         return view('pages.delete', [
-            'book'    => $page->book,
-            'page'    => $page,
+            'book' => $page->book,
+            'page' => $page,
             'current' => $page,
         ]);
     }
@@ -313,8 +319,8 @@ class PageController extends Controller
         $this->setPageTitle(trans('entities.pages_delete_draft_named', ['pageName' => $page->getShortName()]));
 
         return view('pages.delete', [
-            'book'    => $page->book,
-            'page'    => $page,
+            'book' => $page->book,
+            'page' => $page,
             'current' => $page,
         ]);
     }
@@ -377,10 +383,10 @@ class PageController extends Controller
         $this->setPageTitle(trans('entities.recently_updated_pages'));
 
         return view('common.detailed-listing-paginated', [
-            'title'         => trans('entities.recently_updated_pages'),
-            'entities'      => $pages,
+            'title' => trans('entities.recently_updated_pages'),
+            'entities' => $pages,
             'showUpdatedBy' => true,
-            'showPath'      => true,
+            'showPath' => true,
         ]);
     }
 
@@ -500,8 +506,12 @@ class PageController extends Controller
      * @throws NotFoundException
      * @throws Throwable
      */
-    public function permissions(Request $request, PermissionsUpdater $permissionsUpdater, string $bookSlug, string $pageSlug)
-    {
+    public function permissions(
+        Request $request,
+        PermissionsUpdater $permissionsUpdater,
+        string $bookSlug,
+        string $pageSlug
+    ) {
         $page = $this->pageRepo->getBySlug($bookSlug, $pageSlug);
         $this->checkOwnablePermission('restrictions-manage', $page);
 

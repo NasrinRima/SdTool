@@ -70,10 +70,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/shelves/{shelfSlug}/create-book', [BookController::class, 'store']);
     Route::get('/create-book', [BookController::class, 'create']);
     //Annotation
-    Route::get('/1/annotations', [AnnotatorController::class, 'save']);
-    Route::get('/1/annotations/search', [AnnotatorController::class, 'search']);
-    Route::get('/1/annotations/update/1', [AnnotatorController::class, 'update']);
-    Route::get('/1/annotations/delete/1', [AnnotatorController::class, 'delete']);
+    Route::post('/revision/{revision}/annotations', [AnnotatorController::class, 'save']);
+    Route::get('/revision/{revision}/annotations/search', [AnnotatorController::class, 'search']);
+    Route::put('/revision/{revision}/annotations/{annotation}', [AnnotatorController::class, 'update']);
+    Route::delete('/revision/{revision}/annotations/{annotation}', [AnnotatorController::class, 'delete']);
     // Books
     Route::get('/books/', [BookController::class, 'index']);
     Route::post('/books/', [BookController::class, 'store']);

@@ -4,6 +4,7 @@ import {TitleService} from "./scripts/annotator/title-service";
 const annotator = require('./scripts/annotator');
 import './scripts/annotator/jquery.imgareaselect/scripts/jquery.imgareaselect.js'
 import $ from 'jquery';
+import './components/event-bus';
 
 // Url retrieval function
 window.baseUrl = function(path) {
@@ -27,6 +28,7 @@ window.$events = events;
 
 // Load Components
 import components from "./components"
+import moment from "moment";
 components();
 
 
@@ -372,7 +374,6 @@ var AnnotatorApp = annotator.App.extend({
 
 $(document).ready(function () {
     let $container = $('#wiki_body_container');
-    console.log($container);
 
     let $annotation = $('#annotation-holder');
 
@@ -405,8 +406,8 @@ $(document).ready(function () {
         prefix: ANNOTATION_BASE_URL,
         urls: {
             create: '',
-            update: '/update',
-            destroy: '/delete',
+            update: '/{id}',
+            destroy: '/{id}',
             search: '/search'
         }
     });

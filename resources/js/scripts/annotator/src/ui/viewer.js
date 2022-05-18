@@ -341,7 +341,7 @@ var Viewer = exports.Viewer = Widget.extend({
     // Returns nothing.
     _onDeleteClick: function (event) {
         this.hide();
-        Swal({
+      new Swal({
             title: 'Are you sure want to remove this annotation?',
             type: 'question',
             showCancelButton: true,

@@ -3682,7 +3682,7 @@ var require_moment = __commonJS({
       addParseToken("x", function(input, array, config) {
         config._d = new Date(toInt2(input));
       });
-      hooks.version = "2.29.2";
+      hooks.version = "2.29.3";
       setHookCallback(createLocal);
       hooks.fn = proto;
       hooks.min = min;
@@ -12642,5 +12642,5 @@ $(document).ready(function() {
 //! license : MIT
 //! moment.js
 //! momentjs.com
-//! version : 2.29.2
+//! version : 2.29.3
 //# sourceMappingURL=wiki-view.js.map

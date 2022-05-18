@@ -13,7 +13,7 @@ export function getPrimaryToolbar(options) {
         'bullist numlist listoverflow',
         textDirPlugins,
         'link table imagemanager-insert insertoverflow',
-        'code about fullscreen','footnotes',
+        'code about fullscreen', 'footnotes', 'plantuml',
     ];
 
     return toolbar.filter(row => Boolean(row)).join(' | ');

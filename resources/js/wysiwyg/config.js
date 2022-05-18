@@ -84,6 +84,7 @@ function gatherPlugins(options) {
         "details",
         "tasklist",
         'footnotes',
+        // 'plantuml',
         options.textDirection === 'rtl' ? 'directionality' : '',
     ];
 

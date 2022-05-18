@@ -1,14 +1,16 @@
 @extends('layouts.tri')
-
+<meta name="csrf-token" content="{{ csrf_token() }}"/>
+<meta name="mercure" content="{{ env('MERCURE_SUBSCRIBE_URL') }}">
 @push('social-meta')
     <meta property="og:description" content="{{ Str::limit($page->text, 100, '...') }}">
+
 @endpush
 
 @section('body')
     <div id="annotation-holder"
-         data-current="1"
-         data-ref="2"
-         data-annot-url="/1/annotations"
+         data-current="{{ Auth::user()->id??''}}"
+         data-ref="{{$revision}}"
+         data-annot-url="/revision/{{$revision}}/annotations"
          data-token="3"
          class="d-none">
     </div>

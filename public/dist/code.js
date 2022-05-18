@@ -1427,7 +1427,7 @@ var require_codemirror = __commonJS({
       }
       function addMarkedSpan(line, span, op) {
         var inThisOp = op && window.WeakSet && (op.markedSpans || (op.markedSpans = /* @__PURE__ */ new WeakSet()));
-        if (inThisOp && inThisOp.has(line.markedSpans)) {
+        if (inThisOp && line.markedSpans && inThisOp.has(line.markedSpans)) {
           line.markedSpans.push(span);
         } else {
           line.markedSpans = line.markedSpans ? line.markedSpans.concat([span]) : [span];
@@ -10530,7 +10530,7 @@ var require_codemirror = __commonJS({
       };
       CodeMirror3.fromTextArea = fromTextArea;
       addLegacyProps(CodeMirror3);
-      CodeMirror3.version = "5.65.2";
+      CodeMirror3.version = "5.65.3";
       return CodeMirror3;
     });
   }
@@ -10545,26 +10545,30 @@ var require_clipboard_min = __commonJS({
       return n = { 686: function(t, e, n2) {
         "use strict";
         n2.d(e, { default: function() {
-          return o2;
+          return b;
         } });
-        var e = n2(279), i = n2.n(e), e = n2(370), u = n2.n(e), e = n2(817), c = n2.n(e);
-        function a(t2) {
+        var e = n2(279), i = n2.n(e), e = n2(370), u = n2.n(e), e = n2(817), r2 = n2.n(e);
+        function c(t2) {
           try {
             return document.execCommand(t2);
           } catch (t3) {
             return;
           }
         }
+        var a = function(t2) {
+          t2 = r2()(t2);
+          return c("cut"), t2;
+        };
+        function o2(t2, e2) {
+          var n3, o3, t2 = (n3 = t2, o3 = document.documentElement.getAttribute("dir") === "rtl", (t2 = document.createElement("textarea")).style.fontSize = "12pt", t2.style.border = "0", t2.style.padding = "0", t2.style.margin = "0", t2.style.position = "absolute", t2.style[o3 ? "right" : "left"] = "-9999px", o3 = window.pageYOffset || document.documentElement.scrollTop, t2.style.top = "".concat(o3, "px"), t2.setAttribute("readonly", ""), t2.value = n3, t2);
+          return e2.container.appendChild(t2), e2 = r2()(t2), c("copy"), t2.remove(), e2;
+        }
         var f = function(t2) {
-          t2 = c()(t2);
-          return a("cut"), t2;
+          var e2 = 1 < arguments.length && arguments[1] !== void 0 ? arguments[1] : { container: document.body }, n3 = "";
+          return typeof t2 == "string" ? n3 = o2(t2, e2) : t2 instanceof HTMLInputElement && !["text", "search", "url", "tel", "password"].includes(t2 == null ? void 0 : t2.type) ? n3 = o2(t2.value, e2) : (n3 = r2()(t2), c("copy")), n3;
         };
-        var l = function(t2) {
-          var e2, n3, o3, r3 = 1 < arguments.length && arguments[1] !== void 0 ? arguments[1] : { container: document.body }, i2 = "";
-          return typeof t2 == "string" ? (e2 = t2, n3 = document.documentElement.getAttribute("dir") === "rtl", (o3 = document.createElement("textarea")).style.fontSize = "12pt", o3.style.border = "0", o3.style.padding = "0", o3.style.margin = "0", o3.style.position = "absolute", o3.style[n3 ? "right" : "left"] = "-9999px", n3 = window.pageYOffset || document.documentElement.scrollTop, o3.style.top = "".concat(n3, "px"), o3.setAttribute("readonly", ""), o3.value = e2, o3 = o3, r3.container.appendChild(o3), i2 = c()(o3), a("copy"), o3.remove()) : (i2 = c()(t2), a("copy")), i2;
-        };
-        function r2(t2) {
-          return (r2 = typeof Symbol == "function" && typeof Symbol.iterator == "symbol" ? function(t3) {
+        function l(t2) {
+          return (l = typeof Symbol == "function" && typeof Symbol.iterator == "symbol" ? function(t3) {
             return typeof t3;
           } : function(t3) {
             return t3 && typeof Symbol == "function" && t3.constructor === Symbol && t3 !== Symbol.prototype ? "symbol" : typeof t3;
@@ -10575,14 +10579,14 @@ var require_clipboard_min = __commonJS({
           if (n3 !== "copy" && n3 !== "cut")
             throw new Error('Invalid "action" value, use either "copy" or "cut"');
           if (e2 !== void 0) {
-            if (!e2 || r2(e2) !== "object" || e2.nodeType !== 1)
+            if (!e2 || l(e2) !== "object" || e2.nodeType !== 1)
               throw new Error('Invalid "target" value, use a valid Element');
             if (n3 === "copy" && e2.hasAttribute("disabled"))
               throw new Error('Invalid "target" attribute. Please use "readonly" instead of "disabled" attribute');
             if (n3 === "cut" && (e2.hasAttribute("readonly") || e2.hasAttribute("disabled")))
               throw new Error(`Invalid "target" attribute. You can't cut text from elements with "readonly" or "disabled" attributes`);
           }
-          return t2 ? l(t2, { container: o3 }) : e2 ? n3 === "cut" ? f(e2) : l(e2, { container: o3 }) : void 0;
+          return t2 ? f(t2, { container: o3 }) : e2 ? n3 === "cut" ? a(e2) : f(e2, { container: o3 }) : void 0;
         };
         function p(t2) {
           return (p = typeof Symbol == "function" && typeof Symbol.iterator == "symbol" ? function(t3) {
@@ -10618,25 +10622,25 @@ var require_clipboard_min = __commonJS({
             }
           }();
           return function() {
-            var t2, e2 = m(n3);
-            return t2 = o3 ? (t2 = m(this).constructor, Reflect.construct(e2, arguments, t2)) : e2.apply(this, arguments), e2 = this, !(t2 = t2) || p(t2) !== "object" && typeof t2 != "function" ? function(t3) {
+            var t2, e2 = v(n3);
+            return t2 = o3 ? (t2 = v(this).constructor, Reflect.construct(e2, arguments, t2)) : e2.apply(this, arguments), e2 = this, !(t2 = t2) || p(t2) !== "object" && typeof t2 != "function" ? function(t3) {
               if (t3 !== void 0)
                 return t3;
               throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
             }(e2) : t2;
           };
         }
-        function m(t2) {
-          return (m = Object.setPrototypeOf ? Object.getPrototypeOf : function(t3) {
+        function v(t2) {
+          return (v = Object.setPrototypeOf ? Object.getPrototypeOf : function(t3) {
             return t3.__proto__ || Object.getPrototypeOf(t3);
           })(t2);
         }
-        function v(t2, e2) {
+        function m(t2, e2) {
           t2 = "data-clipboard-".concat(t2);
           if (e2.hasAttribute(t2))
             return e2.getAttribute(t2);
         }
-        var o2 = function() {
+        var b = function() {
           !function(t3, e3) {
             if (typeof e3 != "function" && e3 !== null)
               throw new TypeError("Super expression must either be null or a function");
@@ -10652,9 +10656,9 @@ var require_clipboard_min = __commonJS({
           }
           return t2 = r3, n3 = [{ key: "copy", value: function(t3) {
             var e3 = 1 < arguments.length && arguments[1] !== void 0 ? arguments[1] : { container: document.body };
-            return l(t3, e3);
+            return f(t3, e3);
           } }, { key: "cut", value: function(t3) {
-            return f(t3);
+            return a(t3);
           } }, { key: "isSupported", value: function() {
             var t3 = 0 < arguments.length && arguments[0] !== void 0 ? arguments[0] : ["copy", "cut"], t3 = typeof t3 == "string" ? [t3] : t3, e3 = !!document.queryCommandSupported;
             return t3.forEach(function(t4) {
@@ -10671,16 +10675,16 @@ var require_clipboard_min = __commonJS({
           } }, { key: "onClick", value: function(t3) {
             var e3 = t3.delegateTarget || t3.currentTarget, n4 = this.action(e3) || "copy", t3 = s({ action: n4, container: this.container, target: this.target(e3), text: this.text(e3) });
             this.emit(t3 ? "success" : "error", { action: n4, text: t3, trigger: e3, clearSelection: function() {
-              e3 && e3.focus(), document.activeElement.blur(), window.getSelection().removeAllRanges();
+              e3 && e3.focus(), window.getSelection().removeAllRanges();
             } });
           } }, { key: "defaultAction", value: function(t3) {
-            return v("action", t3);
+            return m("action", t3);
           } }, { key: "defaultTarget", value: function(t3) {
-            t3 = v("target", t3);
+            t3 = m("target", t3);
             if (t3)
               return document.querySelector(t3);
           } }, { key: "defaultText", value: function(t3) {
-            return v("text", t3);
+            return m("text", t3);
           } }, { key: "destroy", value: function() {
             this.listener.destroy();
           } }]) && d(t2.prototype, e2), n3 && d(t2, n3), r3;
@@ -13070,7 +13074,7 @@ var require_clike = __commonJS({
             return "meta";
           },
           '"': function(stream, state) {
-            if (!stream.match('""\n'))
+            if (!stream.match(/""$/))
               return false;
             state.tokenize = tokenTripleString;
             return state.tokenize(stream, state);
@@ -23001,7 +23005,7 @@ export {
   wysiwygView
 };
 /*!
- * clipboard.js v2.0.10
+ * clipboard.js v2.0.11
  * https://clipboardjs.com/
  *
  * Licensed MIT © Zeno Rocha

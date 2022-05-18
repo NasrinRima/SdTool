@@ -2,47 +2,81 @@
 
 namespace BookStack\Http\Controllers;
 
-use BookStack\Actions\View;
-use BookStack\Exceptions\NotFoundException;
+use BookStack\Entities\Models\Annotations;
+use BookStack\Entities\Repos\AnnotationsRepo;
 use BookStack\Exceptions\PermissionsException;
-use Exception;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Http\Request;
-use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Throwable;
 
 class AnnotatorController extends Controller
 {
-    public function search()
+    protected $annotationsRepo;
+
+    /**
+     * PageController constructor.
+     */
+    public function __construct(AnnotationsRepo $annotationsRepo)
     {
-        return response()->json([
-            'message' => 'Search Annotator',
-            'status' => true,
-        ]);
+        $this->annotationsRepo = $annotationsRepo;
     }
 
-    public function save()
+    public function search($revision, Request $request)
     {
-        return response()->json([
-            'message' => 'Save Annotator',
-            'status' => true,
-        ]);
+        $annotations = Annotations::query()->where(
+            'page_revision_id',
+            $revision
+        )->get();
+        $data['total'] = count($annotations);
+        $data['rows'] = [];
+
+        foreach ($annotations as $annotation) {
+            $data['rows'][] = $this->annotationsRepo->toArray($annotation);
+        }
+
+        return new JsonResponse($data);
     }
 
-    public function update()
+    public function save($revision, Request $request)
     {
-        return response()->json([
-            'message' => 'Update Annotator',
-            'status' => true,
-        ]);
+        $data = json_decode($request->getContent(), true);
+        $annotation = new Annotations();
+        $annotation->page_revision_id = $revision;
+        $annotation->text = $data['text'];
+        $annotation->quote = $data['quote'];
+        $annotation->ranges = json_encode($data['ranges']);
+        $annotation->image = json_encode($data['image']);
+        $annotation->created_by = Auth::user()->id;
+        $annotation->updated_by = Auth::user()->id;
+        $annotation->save();
+
+        return new JsonResponse($data['ranges']);
     }
 
-    public function delete()
+    public function update($revision, $annotation, Request $request)
     {
-        return response()->json([
-            'message' => 'Delete Annotator',
-            'status' => true,
-        ]);
+        $annotationObj = Annotations::findOrFail($annotation);
+        if(Auth::user()->id != $annotationObj->created_by){
+            throw new PermissionsException();
+        }
+        $annotationObj->text = $request->input('text');
+        $annotationObj->update();
+
+        $data = $this->annotationsRepo->toArray($annotationObj);
+        return new JsonResponse($data);
+    }
+
+    public function delete($revision, $annotation)
+    {
+        $annotationObj = Annotations::findOrFail($annotation);
+        if(Auth::user()->id != $annotationObj->created_by){
+            throw new PermissionsException();
+        }
+
+        $data = $this->annotationsRepo->toArray($annotationObj);
+        $annotationObj->delete();
+        return new JsonResponse($data);
     }
 
 }
