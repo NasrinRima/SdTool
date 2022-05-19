@@ -49,17 +49,7 @@ class MercureBroadcasterAuthorizationCookie
 
     protected function getSubscribeArray($user): array
     {
-        $data = ['http://event/annotation', 'http://example/news-items'];
-        $data[] = 'http://pr/usr/'.$this->getHash($user->getUsername());
-        $data[] = 'http://pr/ses/'.$this->getHash($user->getSession());
-
-        foreach ($user->getGroups() as $group) {
-            $data[] = 'http://pr/grp/'.$this->getHash($group);
-        }
-
-        $data[] = 'http://pr/grp/user';
-
-        return array_unique($data);
+        return ['http://event/annotation', 'http://event/comment'];
     }
 
     private function getHash($value)
