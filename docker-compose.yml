@@ -5,6 +5,8 @@ version: '3'
 
 volumes:
   db: {}
+  caddy_data:
+  caddy_config:
 
 services:
   db:
@@ -53,3 +55,22 @@ services:
     image: mailhog/mailhog
     ports:
       - ${DEV_MAIL_PORT:-8025}:8025
+  mercure:
+    image: dunglas/mercure
+    restart: unless-stopped
+    environment:
+      DEBUG: "debug"
+      # Uncomment the following line to disable HTTPS
+      SERVER_NAME: ':80'
+      MERCURE_PUBLISHER_JWT_KEY: 'abc123!'
+      MERCURE_SUBSCRIBER_JWT_KEY: 'abc123!'
+      MERCURE_EXTRA_DIRECTIVES: |-
+        cors_origins "http://bookstack.local"
+        anonymous
+    # Uncomment the following line to enable the development mode
+    #command: /usr/bin/caddy run -config /etc/caddy/Caddyfile.dev
+    ports:
+      - "3000:80"
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
