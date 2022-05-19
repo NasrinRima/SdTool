@@ -14,7 +14,7 @@ return [
     // This option controls the default broadcaster that will be used by the
     // framework when an event needs to be broadcast. This can be set to
     // any of the connections defined in the "connections" array below.
-    'default' => env('BROADCAST_DRIVER', 'pusher'),
+    'default' => env('BROADCAST_DRIVER', 'mercure'),
 
     // Broadcast Connections
     // Here you may define all of the broadcast connections that will be used
@@ -47,7 +47,7 @@ return [
         ],
         'mercure' => [
             'driver' => 'mercure',
-            'url' => env('MERCURE_URL', 'http://localhost:3000/.well-known/mercure'),
+            'url' => env('MERCURE_SUBSCRIBE_URL', 'http://localhost:3000/.well-known/mercure'),
             'secret' => env('MERCURE_SECRET', 'aVerySecretKey'),
         ],
 

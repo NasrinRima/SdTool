@@ -93,7 +93,7 @@ return [
 
     // Encryption cipher
     'cipher' => 'AES-256-CBC',
-
+    'mercure_subscribe_url' => env('MERCURE_SUBSCRIBE_URL',''),
     // Application Services Provides
     'providers' => [
 

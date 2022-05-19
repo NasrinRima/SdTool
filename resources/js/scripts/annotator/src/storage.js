@@ -120,8 +120,7 @@ var HttpStorage;
  */
 exports.http = function http(options) {
     // This gets overridden on app start
-    var notify = function () {
-    };
+    var notify = function () {};
 
     if (typeof options === 'undefined' || options === null) {
         options = {};
@@ -228,11 +227,11 @@ HttpStorage.prototype['delete'] = function (annotation) {
  */
 HttpStorage.prototype.query = function (queryObj) {
     return this._apiRequest('search', queryObj)
-        .then(function (obj) {
-            var rows = obj.rows;
-            delete obj.rows;
-            return {results: rows, meta: obj};
-        });
+    .then(function (obj) {
+        var rows = obj.rows;
+        delete obj.rows;
+        return {results: rows, meta: obj};
+    });
 };
 
 /**
@@ -263,7 +262,7 @@ HttpStorage.prototype.setHeader = function (key, value) {
  */
 $.ajaxSetup({
     headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        'X-CSRF-TOKEN': $('meta[name="token"]').attr('content')
     }
 });
 HttpStorage.prototype._apiRequest = function (action, obj) {
@@ -272,8 +271,7 @@ HttpStorage.prototype._apiRequest = function (action, obj) {
     var options = this._apiRequestOptions(action, obj);
 
     var request = $.ajax(url, options);
-    let $annotation = $('#annotation-holder');
-    console.log($annotation);
+
     // Append the id and action to the request object
     // for use in the error callback.
     request._id = id;
@@ -297,9 +295,7 @@ HttpStorage.prototype._apiRequestOptions = function (action, obj) {
     var opts = {
         type: method,
         dataType: "json",
-        error: function () {
-            self._onError.apply(self, arguments);
-        },
+        error: function () { self._onError.apply(self, arguments); },
         headers: this.options.headers
     };
 
@@ -394,19 +390,19 @@ HttpStorage.prototype._onError = function (xhr) {
     var message;
     if (xhr.status === 400) {
         message = _t("The annotation store did not understand the request! " +
-            "(Error 400)");
+                     "(Error 400)");
     } else if (xhr.status === 401) {
         message = _t("You must be logged in to perform this operation! " +
-            "(Error 401)");
+                     "(Error 401)");
     } else if (xhr.status === 403) {
         message = _t("You don't have permission to perform this operation! " +
-            "(Error 403)");
+                     "(Error 403)");
     } else if (xhr.status === 404) {
         message = _t("Could not connect to the annotation store! " +
-            "(Error 404)");
+                     "(Error 404)");
     } else if (xhr.status === 500) {
         message = _t("Internal error in annotation store! " +
-            "(Error 500)");
+                     "(Error 500)");
     } else {
         message = _t("Unknown error while speaking to annotation store!");
     }
@@ -490,9 +486,9 @@ HttpStorage.options = {
      *      }
      */
     urls: {
-        create: '/annotator',
-        update: '/update',
-        destroy: '/delete',
+        create: '/annotations',
+        update: '/annotations/{id}',
+        destroy: '/annotations/{id}',
         search: '/search'
     }
 };

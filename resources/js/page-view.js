@@ -1,20 +1,22 @@
 import 'moment';
 import './scripts/annotator/toastr';
 import {TitleService} from "./scripts/annotator/title-service";
+
 const annotator = require('./scripts/annotator');
 import './scripts/annotator/jquery.imgareaselect/scripts/jquery.imgareaselect.js'
 import $ from 'jquery';
-import './components/event-bus';
+import {EventBusService} from './components/event-bus';
+
 
 // Url retrieval function
-window.baseUrl = function(path) {
+window.baseUrl = function (path) {
     let basePath = document.querySelector('meta[name="base-url"]').getAttribute('content');
-    if (basePath[basePath.length-1] === '/') basePath = basePath.slice(0, basePath.length-1);
+    if (basePath[basePath.length - 1] === '/') basePath = basePath.slice(0, basePath.length - 1);
     if (path[0] === '/') path = path.slice(1);
     return basePath + '/' + path;
 };
 
-window.importVersioned = function(moduleName) {
+window.importVersioned = function (moduleName) {
     const version = document.querySelector('link[href*="/dist/styles.css?version="]').href.split('?version=').pop();
     const importPath = window.baseUrl(`dist/${moduleName}.js?version=${version}`);
     return import(importPath);
@@ -23,18 +25,19 @@ window.importVersioned = function(moduleName) {
 // Set events and http services on window
 import events from "./services/events"
 import httpInstance from "./services/http"
+
 window.$http = httpInstance;
 window.$events = events;
 
 // Load Components
 import components from "./components"
 import moment from "moment";
+
 components();
-
-
 window.$ = window.jQuery = $;
 window.global = globalThis;
 const _t = annotator.util.gettext;
+
 function annotatorImageSelect(options) {
 
     options = options || {};
@@ -371,20 +374,14 @@ var AnnotatorApp = annotator.App.extend({
     }
 });
 
-
 $(document).ready(function () {
-    let $container = $('#wiki_body_container');
-
-    let $annotation = $('#annotation-holder');
-
+    const $container = $('#wiki_body_container');
+    const $annotation = $('#annotation-holder');
     const ANNOTATION_BASE_URL = $annotation.data('annot-url');
-
     const csrf = $annotation.data('token');
     const ref = $annotation.data('ref');
     const currentUser = $annotation.data('current');
-
     $annotation.remove();
-
     $container.find('img').each((index, el) => {
         el.src += '#' + index; //Differentiate two image with same src
     });
@@ -430,6 +427,47 @@ $(document).ready(function () {
         TitleService.blink(msg);
     }
 
+    EventBusService.on('event', 'annotation.created.' + ref)
+        .subscribe(anno => {
+            if ($('.annotator-hl[data-annotation-id=' + anno.data.id + ']').length === 0) {
+                app.imgselect_utils.drawImageHighlight(anno.data);
+                app.highlighter.draw(anno.data);
+                notifyUser('Annotation added by ' + anno.data.userName + '!');
+                $('.annotator-hl[data-annotation-id=' + anno.data.id + ']').addClass('animated flash')
+            }
+        });
+    EventBusService.on('event', 'annotation.updated.' + ref)
+        .subscribe(anno => {
+            const element = $('.annotator-hl[data-annotation-id=' + anno.data.id + ']');
+            if (element.length === 1 && element.data('annotation').text !== anno.text) {
+                notifyUser('Annotation updated by ' + anno.data.userName + '!');
+                if (typeof anno.data.id !== "undefined" && anno.data.image && anno.data.image.src) {
+                    element.remove();
+                    app.imgselect_utils.drawImageHighlight(anno.data);
+                    $('.annotator-hl[data-annotation-id=' + anno.data.id + ']').addClass('animated flash');
+                    return;
+                }
+                anno._local = {highlights: element};
+                app.highlighter.redraw(anno.data);
+                $('.annotator-hl[data-annotation-id=' + anno.data.id + ']').addClass('animated flash');
+            }
+        });
+
+
+    EventBusService.on('event', 'annotation.deleted.' + ref)
+        .subscribe(anno => {
+            const element = $('.annotator-hl[data-annotation-id=' + anno.data.id + ']');
+            if (element.length === 1) {
+
+                if (typeof anno.data.id !== "undefined" && anno.data.image && anno.data.image.src) {
+                    element.remove();
+                }
+
+                anno._local = {highlights: element};
+                app.highlighter.undraw(anno.data);
+                notifyUser('Annotation removed by ' + anno.data.userName + '!');
+            }
+        });
 });
 
 

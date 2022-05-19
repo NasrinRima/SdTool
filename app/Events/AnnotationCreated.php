@@ -17,13 +17,23 @@ class AnnotationCreated implements ShouldBroadcast
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(protected $revision, protected array $data)
     {
         //
     }
 
     public function broadcastOn()
     {
-        return new Channel('http://bookstack.local/books/test-book/page/new-page');
+        return new Channel('http://event/annotation');
+    }
+
+    public function broadcastAs()
+    {
+        return 'event.annotation.created.'.$this->revision;
+    }
+
+    public function broadcastWith()
+    {
+        return $this->data;
     }
 }
