@@ -30,7 +30,7 @@ class MercureBroadcasterAuthorizationCookie
             $this->getToken($user),
             15,
             '/.well-known/mercure', // or which path you have mercure running
-            parse_url('http://bookstack.local', PHP_URL_HOST),
+            parse_url(config('app.url'), PHP_URL_HOST),
             $secure,
             true
         );
@@ -50,10 +50,5 @@ class MercureBroadcasterAuthorizationCookie
     protected function getSubscribeArray($user): array
     {
         return ['http://event/annotation', 'http://event/comment'];
-    }
-
-    private function getHash($value)
-    {
-        return strtoupper(md5($value.'mercure'));
     }
 }
