@@ -1,4 +1,6 @@
 {
+  "name": "easy-wiki",
+  "description": "A Wiki Application with versioning and approval flow",
   "private": true,
   "scripts": {
     "build:css:dev": "sass ./resources/sass:./public/dist",
