@@ -1,4 +1,4 @@
-<div class="comment-box" style="display:none;">
+<div class="comment-box mb-xl" style="display:none;">
 
     <div class="header p-s">{{ trans('entities.comment_new') }}</div>
     <div refs="page-comments@replyToRow" class="reply-row primary-background-light text-muted px-s py-xs mb-s" style="display: none;">

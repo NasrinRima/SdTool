@@ -7,7 +7,7 @@
          class="comments-list"
          aria-label="{{ trans('entities.comments') }}">
 
-    <div refs="page-comments@commentCountBar" class="grid half left-focus v-center no-row-gap">
+    <div refs="page-comments@commentCountBar" class="grid half left-focus v-center no-row-gap mb-xl">
         <h5 comments-title>{{ trans_choice('entities.comment_count', count($page->comments), ['count' => count($page->comments)]) }}</h5>
         @if (count($page->comments) === 0 && userCan('comment-create-all'))
             <div class="text-m-right" refs="page-comments@addButtonContainer">
@@ -17,7 +17,7 @@
         @endif
     </div>
 
-    <div refs="page-comments@commentContainer" class="comment-container">
+    <div refs="page-comments@commentContainer" class="comment-container mb-xl">
         @foreach($page->comments as $comment)
             @include('comments.comment', ['comment' => $comment])
         @endforeach
@@ -27,7 +27,7 @@
         @include('comments.create')
 
         @if (count($page->comments) > 0)
-            <div refs="page-comments@addButtonContainer" class="text-right">
+            <div refs="page-comments@addButtonContainer" class="text-right mb-xl">
                 <button type="button" action="addComment"
                         class="button outline">{{ trans('entities.comment_add') }}</button>
             </div>

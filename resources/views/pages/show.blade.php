@@ -27,15 +27,9 @@
         </div>
     </main>
 
-    @include('entities.sibling-navigation', ['next' => $next, 'previous' => $previous])
+{{--    @include('entities.sibling-navigation', ['next' => $next, 'previous' => $previous])--}}
     @guest
         @if ($commentsEnabled)
-            @if(($previous || $next))
-                <div class="px-xl">
-                    <hr class="darker">
-                </div>
-            @endif
-
             <div class="px-xl comments-container mb-l print-hidden">
                 @include('comments.comments', ['page' => $page])
                 <div class="clearfix"></div>

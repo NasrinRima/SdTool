@@ -42,11 +42,11 @@
 
     @include('common.footer')
 
-    <div back-to-top class="primary-background print-hidden">
+    {{--<div back-to-top class="primary-background print-hidden">
         <div class="inner">
             @icon('chevron-up') <span>{{ trans('common.back_to_top') }}</span>
         </div>
-    </div>
+    </div>--}}
 
     @yield('bottom')
     @yield('scripts')

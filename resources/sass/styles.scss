@@ -324,3 +324,13 @@ table.table .table-entity-item {
   grid-template-columns: 36px 1fr;
   align-items: center;
 }
+.footer {
+  background: #FFFFFF;
+  font-size: 14px;
+  height: 10px;
+  position: fixed;
+  box-shadow: 0 0 28px 0 rgb(82 63 105 / 13%);
+  bottom: 0;
+  right: 0;
+  left: 0;
+}
