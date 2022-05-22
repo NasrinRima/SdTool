@@ -74,23 +74,11 @@ class LoginController extends Controller
      */
     public function getLogin(Request $request)
     {
-        $socialDrivers = $this->socialAuthService->getActiveDrivers();
-        $authMethod = config('auth.method');
-
-        if ($request->has('email')) {
-            session()->flashInput([
-                'email'    => $request->get('email'),
-                'password' => (config('app.env') === 'demo') ? $request->get('password', '') : '',
-            ]);
-        }
-
         // Store the previous location for redirect after login
         $this->updateIntendedFromPrevious();
+        session()->put('social-callback', 'login');
 
-        return view('auth.login', [
-            'socialDrivers' => $socialDrivers,
-            'authMethod'    => $authMethod,
-        ]);
+        return Socialite::driver('keycloak')->redirect();
     }
 
     /**
@@ -159,7 +147,7 @@ class LoginController extends Controller
      * The user has been authenticated.
      *
      * @param \Illuminate\Http\Request $request
-     * @param mixed                    $user
+     * @param mixed $user
      *
      * @return mixed
      */
@@ -173,9 +161,9 @@ class LoginController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      *
+     * @return void
      * @throws \Illuminate\Validation\ValidationException
      *
-     * @return void
      */
     protected function validateLogin(Request $request)
     {
@@ -216,9 +204,9 @@ class LoginController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      *
+     * @return \Symfony\Component\HttpFoundation\Response
      * @throws \Illuminate\Validation\ValidationException
      *
-     * @return \Symfony\Component\HttpFoundation\Response
      */
     protected function sendFailedLoginResponse(Request $request)
     {
@@ -269,6 +257,7 @@ class LoginController extends Controller
 
         Auth::logout(); // Logout of your app
         $redirectUri = Config::get('app.url'); // The URL the user is redirected to
+
         return redirect(Socialite::driver('keycloak')->getLogoutUrl($redirectUri));
     }
 }
