@@ -5,7 +5,9 @@ namespace BookStack\Http\Controllers;
 use BookStack\Actions\Comment;
 use BookStack\Actions\CommentRepo;
 use BookStack\Entities\Models\Page;
-use BookStack\Events\NewCommentsCreated;
+use BookStack\Events\CommentsUpdated;
+use BookStack\Events\CommentsCreated;
+use BookStack\Events\NewCommentsUpdated;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
@@ -52,7 +54,7 @@ class CommentController extends Controller
             'updated_at' => $comment->updated_at ?? '',
             'parent_id' => $comment->parent_id ?? '',
         ];
-        NewCommentsCreated::dispatch($commentArray);
+        CommentsCreated::dispatch($commentArray);
 
         return view('comments.comment', ['comment' => $comment]);
     }
@@ -73,6 +75,16 @@ class CommentController extends Controller
         $this->checkOwnablePermission('comment-update', $comment);
 
         $comment = $this->commentRepo->update($comment, $request->get('text'));
+        $commentArray = [
+            'id' => $comment->id ?? '',
+            'local_id' => $comment->local_id ?? '',
+            'created_by' => $comment->createdBy->getProfileUrl() ?? '',
+            'createdBy' => $comment->createdBy ?? '',
+            'text' => $comment->text ?? '',
+            'updated_at' => $comment->updated_at ?? '',
+            'parent_id' => $comment->parent_id ?? '',
+        ];
+        CommentsUpdated::dispatch($commentArray);
 
         return view('comments.comment', ['comment' => $comment]);
     }
@@ -90,7 +102,7 @@ class CommentController extends Controller
         return response()->json(['message' => trans('entities.comment_deleted')]);
     }
 
-    public function getCreatedComment($id)
+    public function getComment($id)
     {
         return view('comments.comment', ['comment' => $this->commentRepo->getById($id)]);
 

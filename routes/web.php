@@ -193,7 +193,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/comment/{pageId}', [CommentController::class, 'savePageComment']);
     Route::put('/comment/{id}', [CommentController::class, 'update']);
     Route::delete('/comment/{id}', [CommentController::class, 'destroy']);
-    Route::get('/comment/{id}', [CommentController::class, 'getCreatedComment']);
+    Route::get('/comment/{id}', [CommentController::class, 'getComment']);
 
     // Links
     Route::get('/link/{id}', [PageController::class, 'redirectFromLink']);

@@ -53,6 +53,19 @@ EventBusService.on('event', 'comments.created')
             }
         });
     });
+EventBusService.on('event', 'comments.updated')
+    .subscribe(comment => {
+        $.ajax({
+            url: '/comment/' + comment.data.id,
+            type: "GET",
+            dataType: "html",
+            success: function (view) {
+                $('div[comment= "'+ comment.data.id +'" ]').replaceWith(view);
+            },
+            error: function (error) {
+            }
+        });
+    });
 // Load Components
 import components from "./components"
 

@@ -8,7 +8,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Duijker\LaravelMercureBroadcaster\Broadcasting\Channel;
 
-class NewCommentsCreated implements ShouldBroadcast
+class CommentsCreated implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
