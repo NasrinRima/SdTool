@@ -7,6 +7,9 @@ use Firebase\JWT\JWT;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cookie;
+use Lcobucci\JWT\Configuration;
+use Lcobucci\JWT\Signer\Hmac\Sha256;
+use Lcobucci\JWT\Signer\Key\InMemory;
 
 class MercureBroadcasterAuthorizationCookie
 {
@@ -21,30 +24,33 @@ class MercureBroadcasterAuthorizationCookie
 
         return $response->withCookie($this->createCookie($request->user(), $request->secure()));
     }
-
     private function createCookie($user, bool $secure)
     {
+        // Add topic(s) this user has access to
+        // This can also be URI Templates (to match several topics), or * (to match all topics)
+        $subscriptions = [
+            "http://example/user/{$user->id}/direct-messages",
+        ];
+
+        $jwtConfiguration = Configuration::forSymmetricSigner(
+            new Sha256(),
+            InMemory::plainText(config('broadcasting.connections.mercure.secret'))
+        );
+
+        $token = $jwtConfiguration->builder()
+            ->withClaim('mercure', ['subscribe' => $this->getSubscribeArray($user)])
+            ->getToken($jwtConfiguration->signer(), $jwtConfiguration->signingKey())
+            ->toString();
 
         return Cookie::make(
             'mercureAuthorization',
-            $this->getToken($user),
+            $token,
             15,
             '/.well-known/mercure', // or which path you have mercure running
             parse_url(config('app.url'), PHP_URL_HOST),
             $secure,
             true
         );
-    }
-
-    public function getToken($user)
-    {
-        $payload = [
-            'mercure' => [
-                'subscribe' => $this->getSubscribeArray($user),
-            ],
-        ];
-
-        return JWT::encode($payload, env('JWT_KEY'), 'HS256');
     }
 
     protected function getSubscribeArray($user): array
