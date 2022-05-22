@@ -79,6 +79,10 @@ class LoginController extends Controller
         session()->put('social-callback', 'login');
 
         return Socialite::driver('keycloak')->redirect();
+//        return view('auth.login', [
+//            'socialDrivers' => $socialDrivers,
+//            'authMethod'    => $authMethod,
+//        ]);
     }
 
     /**
@@ -86,9 +90,9 @@ class LoginController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      *
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Http\JsonResponse
      * @throws \Illuminate\Validation\ValidationException
      *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Http\JsonResponse
      */
     public function login(Request $request)
     {

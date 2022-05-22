@@ -89,9 +89,7 @@ class SocialController extends Controller
             try {
                 return $this->socialAuthService->handleLoginCallback($socialDriver, $socialUser);
             } catch (SocialSignInAccountNotUsed $exception) {
-                if ($this->socialAuthService->driverAutoRegisterEnabled($socialDriver)) {
-                    return $this->socialRegisterCallback($socialDriver, $socialUser);
-                }
+                return $this->socialRegisterCallback($socialDriver, $socialUser);
 
                 throw $exception;
             }
