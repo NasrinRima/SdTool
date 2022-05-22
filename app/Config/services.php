@@ -143,5 +143,6 @@ return [
         'redirect' => env('KEYCLOAK_REDIRECT_URI'),
         'base_url' => env('KEYCLOAK_BASE_URL'),   // Specify your keycloak server URL here
         'realms' => env('KEYCLOAK_REALM'),         // Specify your keycloak realm
+        'auto_register' => env('KEYCLOAK_AUTO_REGISTER', false),
     ],
 ];
