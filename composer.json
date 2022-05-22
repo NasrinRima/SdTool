@@ -8,7 +8,7 @@
     "license": "MIT",
     "type": "project",
     "require": {
-        "php": "^7.4|^8.0",
+        "php": "^8.0",
         "ext-curl": "*",
         "ext-dom": "*",
         "ext-fileinfo": "*",
@@ -21,7 +21,6 @@
         "barryvdh/laravel-snappy": "^1.0",
         "doctrine/dbal": "^3.1",
         "filp/whoops": "^2.14",
-        "firebase/php-jwt": "^6.2",
         "guzzlehttp/guzzle": "^7.4",
         "intervention/image": "^2.7",
         "laravel/framework": "^8.68",
@@ -97,10 +96,7 @@
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
-        "sort-packages": true,
-        "platform": {
-            "php": "7.4.0"
-        }
+        "sort-packages": true
     },
     "extra": {
         "laravel": {
