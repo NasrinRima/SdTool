@@ -7,11 +7,13 @@ use BookStack\Facades\Activity;
 use BookStack\Interfaces\Loggable;
 use BookStack\Model;
 use BookStack\Util\WebSafeMimeSniffer;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Facades\Auth;
 
 abstract class Controller extends BaseController
 {
@@ -54,7 +56,10 @@ abstract class Controller extends BaseController
     protected function showPermissionError()
     {
         $message = request()->wantsJson() ? trans('errors.permissionJson') : trans('errors.permission');
-
+        if (null === Auth::user()) {
+            $message = trans('errors.api_no_authorization_found') ;
+            throw new AuthenticationException($message, [Auth::check()], '/login');
+        }
         throw new NotifyException($message, '/', 403);
     }
 
@@ -114,8 +119,8 @@ abstract class Controller extends BaseController
     protected function downloadResponse(string $content, string $fileName): Response
     {
         return response()->make($content, 200, [
-            'Content-Type'           => 'application/octet-stream',
-            'Content-Disposition'    => 'attachment; filename="' . $fileName . '"',
+            'Content-Type' => 'application/octet-stream',
+            'Content-Disposition' => 'attachment; filename="'.$fileName.'"',
             'X-Content-Type-Options' => 'nosniff',
         ]);
     }
@@ -129,8 +134,8 @@ abstract class Controller extends BaseController
         $mime = (new WebSafeMimeSniffer())->sniff($content);
 
         return response()->make($content, 200, [
-            'Content-Type'           => $mime,
-            'Content-Disposition'    => 'inline; filename="' . $fileName . '"',
+            'Content-Type' => $mime,
+            'Content-Disposition' => 'inline; filename="'.$fileName.'"',
             'X-Content-Type-Options' => 'nosniff',
         ]);
     }
@@ -174,6 +179,6 @@ abstract class Controller extends BaseController
      */
     protected function getImageValidationRules(): array
     {
-        return ['image_extension', 'mimes:jpeg,png,gif,webp', 'max:' . (config('app.upload_limit') * 1000)];
+        return ['image_extension', 'mimes:jpeg,png,gif,webp', 'max:'.(config('app.upload_limit') * 1000)];
     }
 }
