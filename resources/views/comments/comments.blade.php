@@ -7,10 +7,10 @@
          class="comments-list"
          aria-label="{{ trans('entities.comments') }}">
 
-    <div refs="page-comments@commentCountBar" class="grid half left-focus v-center no-row-gap mb-xl">
+    <div refs="page-comments@commentCountBar" class="comment-bar grid half left-focus v-center no-row-gap mb-xl">
         <h5 comments-title>{{ trans_choice('entities.comment_count', count($page->comments), ['count' => count($page->comments)]) }}</h5>
         @if (count($page->comments) === 0 && userCan('comment-create-all'))
-            <div class="text-m-right" refs="page-comments@addButtonContainer">
+            <div class="text-m-right comment-button " refs="page-comments@addButtonContainer">
                 <button type="button" action="addComment"
                         class="button outline">{{ trans('entities.comment_add') }}</button>
             </div>
@@ -27,7 +27,7 @@
         @include('comments.create')
 
         @if (count($page->comments) > 0)
-            <div refs="page-comments@addButtonContainer" class="text-right mb-xl">
+            <div refs="page-comments@addButtonContainer" class="text-right mb-xl comment-button">
                 <button type="button" action="addComment"
                         class="button outline">{{ trans('entities.comment_add') }}</button>
             </div>

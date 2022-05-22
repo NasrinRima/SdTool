@@ -2,8 +2,10 @@
 
 namespace BookStack\Http\Controllers;
 
+use BookStack\Actions\Comment;
 use BookStack\Actions\CommentRepo;
 use BookStack\Entities\Models\Page;
+use BookStack\Events\NewCommentsCreated;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
@@ -24,7 +26,7 @@ class CommentController extends Controller
     public function savePageComment(Request $request, int $pageId)
     {
         $this->validate($request, [
-            'text'      => ['required', 'string'],
+            'text' => ['required', 'string'],
             'parent_id' => ['nullable', 'integer'],
         ]);
 
@@ -41,6 +43,16 @@ class CommentController extends Controller
         // Create a new comment.
         $this->checkPermission('comment-create-all');
         $comment = $this->commentRepo->create($page, $request->get('text'), $request->get('parent_id'));
+        $commentArray = [
+            'id' => $comment->id ?? '',
+            'local_id' => $comment->local_id ?? '',
+            'created_by' => $comment->createdBy->getProfileUrl() ?? '',
+            'createdBy' => $comment->createdBy ?? '',
+            'text' => $comment->text ?? '',
+            'updated_at' => $comment->updated_at ?? '',
+            'parent_id' => $comment->parent_id ?? '',
+        ];
+        NewCommentsCreated::dispatch($commentArray);
 
         return view('comments.comment', ['comment' => $comment]);
     }
@@ -76,5 +88,11 @@ class CommentController extends Controller
         $this->commentRepo->delete($comment);
 
         return response()->json(['message' => trans('entities.comment_deleted')]);
+    }
+
+    public function getCreatedComment($id)
+    {
+        return view('comments.comment', ['comment' => $this->commentRepo->getById($id)]);
+
     }
 }

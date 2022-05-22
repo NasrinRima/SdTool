@@ -1,26 +1,41 @@
 <?php
 
-namespace App\Events;
+namespace BookStack\Events;
 
-use BookStack\Actions\Comment;
-use Duijker\LaravelMercureBroadcaster\Broadcasting\Channel;
+use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Foundation\Events\Dispatchable;
+use Illuminate\Queue\SerializesModels;
+use Duijker\LaravelMercureBroadcaster\Broadcasting\Channel;
 
 class NewCommentsCreated implements ShouldBroadcast
 {
+    use Dispatchable, InteractsWithSockets, SerializesModels;
+
+    protected $comment;
 
     /**
-     * @var Comment
+     * Create a new event instance.
+     *
+     * @return void
      */
-    public $comment;
-
-    public function __construct(Comment $comment)
+    public function __construct($comment)
     {
         $this->comment = $comment;
     }
 
     public function broadcastOn()
     {
-        return new Channel('http://bookstack.local/news-items');
+        return new Channel('http://event/comment');
+    }
+
+    public function broadcastAs()
+    {
+        return 'event.comments.created';
+    }
+
+    public function broadcastWith()
+    {
+        return $this->comment;
     }
 }

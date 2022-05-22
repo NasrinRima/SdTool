@@ -69,6 +69,7 @@ class EventBus {
 let url = null;
 
 const element = document.querySelector('meta[name=mercure]');
+console.log(element);
 
 if (element) {
   const MERCURE_SUBSCRIBE_URL = element.getAttribute('content');

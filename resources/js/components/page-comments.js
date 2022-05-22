@@ -53,7 +53,6 @@ class PageComments {
         if (action === 'closeUpdateForm') this.closeUpdateForm();
         if (action === 'delete') this.deleteComment(comment);
         if (action === 'addComment') {
-            console.log('here');
             this.showForm();
         }
         if (action === 'hideForm') this.hideForm();
@@ -166,6 +165,7 @@ class PageComments {
             this.commentCountBar.appendChild(this.addButtonContainer);
         }
         this.addButtonContainer.style.display = 'block';
+        $(".comment-button").addClass("mb-xl");
     }
 
     getCommentCount() {
