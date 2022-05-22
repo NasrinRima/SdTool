@@ -3,7 +3,6 @@
 namespace BookStack\Http\Middleware;
 
 use Closure;
-use Firebase\JWT\JWT;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cookie;
@@ -24,14 +23,9 @@ class MercureBroadcasterAuthorizationCookie
 
         return $response->withCookie($this->createCookie($request->user(), $request->secure()));
     }
+
     private function createCookie($user, bool $secure)
     {
-        // Add topic(s) this user has access to
-        // This can also be URI Templates (to match several topics), or * (to match all topics)
-        $subscriptions = [
-            "http://example/user/{$user->id}/direct-messages",
-        ];
-
         $jwtConfiguration = Configuration::forSymmetricSigner(
             new Sha256(),
             InMemory::plainText(config('broadcasting.connections.mercure.secret'))
