@@ -328,10 +328,6 @@ Route::get('/saml2/acs', [Auth\Saml2Controller::class, 'processAcs']);
 Route::post('/oidc/login', [Auth\OidcController::class, 'login']);
 Route::get('/oidc/callback', [Auth\OidcController::class, 'callback']);
 
-// User invitation routes
-Route::get('/register/invite/{token}', [Auth\UserInviteController::class, 'showSetPassword']);
-Route::post('/register/invite/{token}', [Auth\UserInviteController::class, 'setPassword']);
-
 // Password reset link request routes
 Route::get('/password/email', [Auth\ForgotPasswordController::class, 'showLinkRequestForm']);
 Route::post('/password/email', [Auth\ForgotPasswordController::class, 'sendResetLinkEmail']);
