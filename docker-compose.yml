@@ -47,9 +47,7 @@ services:
     env_file:
       - dev.env
     environment:
-      MERCURE_EXTRA_DIRECTIVES: |-
-        cors_origins "http://bookstack.local"
-        anonymous
+      MERCURE_EXTRA_DIRECTIVES: cors_origins "http://bookstack.local"
     # Uncomment the following line to enable the development mode
     #command: /usr/bin/caddy run -config /etc/caddy/Caddyfile.dev
     ports:

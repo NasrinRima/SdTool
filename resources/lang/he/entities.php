@@ -330,7 +330,8 @@ return [
     'comment_updated_success' => 'התגובה עודכנה',
     'comment_delete_confirm' => 'האם ברצונך למחוק תגובה זו?',
     'comment_in_reply_to' => 'בתגובה ל :commentId',
-
+    //Annotation
+    'annotation'=>'Annotation',
     // Revision
     'revision_delete_confirm' => 'האם ברצונך למחוק נוסח זה?',
     'revision_restore_confirm' => 'האם ברצונך לשחזר נוסח זה? תוכן הדף הנוכחי יעודכן לנוסח זה.',

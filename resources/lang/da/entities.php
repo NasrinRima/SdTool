@@ -331,6 +331,9 @@ return [
     'comment_delete_confirm' => 'Er du sikker på, at du vil slette denne kommentar?',
     'comment_in_reply_to' => 'Som svar til :commentId',
 
+    //Annotation
+    'annotation'=>'Annotation',
+
     // Revision
     'revision_delete_confirm' => 'Er du sikker på at du vil slette denne revision?',
     'revision_restore_confirm' => 'Er du sikker på at du ønsker at gendanne denne revision? Nuværende sideindhold vil blive erstattet.',

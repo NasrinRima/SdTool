@@ -331,6 +331,8 @@ return [
     'comment_delete_confirm' => 'تأكيد حذف التعليق؟',
     'comment_in_reply_to' => 'رداً على :commentId',
 
+    //Annotation
+    'annotation'=>'Annotation',
     // Revision
     'revision_delete_confirm' => 'هل أنت متأكد من أنك تريد حذف هذه المراجعة؟',
     'revision_restore_confirm' => 'هل أنت متأكد من أنك تريد استعادة هذه المراجعة؟ سيتم استبدال محتوى الصفحة الحالية.',

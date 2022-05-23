@@ -331,6 +331,8 @@ return [
     'comment_delete_confirm' => 'Möchtst Du diesen Kommentar wirklich löschen?',
     'comment_in_reply_to' => 'Antwort auf :commentId',
 
+    //Annotation
+    'annotation'=>'Annotation',
     // Revision
     'revision_delete_confirm' => 'Bist Du sicher, dass Du diese Revision löschen möchtest?',
     'revision_restore_confirm' => 'Sind Sie sicher, dass Sie diese Revision wiederherstellen wollen? Der aktuelle Seiteninhalt wird ersetzt.',

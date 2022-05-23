@@ -331,6 +331,8 @@ return [
     'comment_delete_confirm' => 'Kas oled kindel, et soovid selle kommentaari kustutada?',
     'comment_in_reply_to' => 'Vastus kommentaarile :commentId',
 
+    //Annotation
+    'annotation'=>'Annotation',
     // Revision
     'revision_delete_confirm' => 'Kas oled kindel, et soovid selle redaktsiooni kustutada?',
     'revision_restore_confirm' => 'Kas oled kindel, et soovid selle redaktsiooni taastada? Lehe praegune sisu asendatakse.',

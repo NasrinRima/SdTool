@@ -331,6 +331,9 @@ return [
     'comment_delete_confirm' => 'Opravdu chcete odstranit tento komentář?',
     'comment_in_reply_to' => 'Odpověď na :commentId',
 
+    //Annotation
+    'annotation'=>'Annotation',
+
     // Revision
     'revision_delete_confirm' => 'Opravdu chcete odstranit tuto revizi?',
     'revision_restore_confirm' => 'Jste si jisti, že chcete obnovit tuto revizi? Aktuální obsah stránky bude nahrazen.',

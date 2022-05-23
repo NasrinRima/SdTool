@@ -331,6 +331,9 @@ return [
     'comment_delete_confirm' => 'Наистина ли искате да изтриете този коментар?',
     'comment_in_reply_to' => 'В отговор на :commentId',
 
+    //Annotation
+    'annotation'=>'Annotation',
+
     // Revision
     'revision_delete_confirm' => 'Наистина ли искате да изтриете тази версия?',
     'revision_restore_confirm' => 'Сигурни ли сте, че искате да изтриете тази версия? Настоящата страница ще бъде заместена.',

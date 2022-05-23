@@ -331,6 +331,9 @@ return [
     'comment_delete_confirm' => 'Are you sure you want to delete this comment?',
     'comment_in_reply_to' => 'In reply to :commentId',
 
+    //Annotation
+    'annotation'=>'Annotation',
+
     // Revision
     'revision_delete_confirm' => 'Are you sure you want to delete this revision?',
     'revision_restore_confirm' => 'Are you sure you want to restore this revision? The current page contents will be replaced.',

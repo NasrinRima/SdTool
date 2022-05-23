@@ -203,6 +203,28 @@
             </tr>
             <tr>
                 <td>
+                    <div>{{ trans('entities.annotation') }}</div>
+                    <a href="#" permissions-table-toggle-all-in-row class="text-small text-primary">{{ trans('common.toggle_all') }}</a>
+                </td>
+                <td>
+                    @include('settings.roles.parts.checkbox', ['permission' => 'annotation-create-own', 'label' => trans('settings.role_own')])
+                    <br>
+                    @include('settings.roles.parts.checkbox', ['permission' => 'annotation-create-all', 'label' => trans('settings.role_all')])
+                </td>
+                <td style="line-height:1.2;"><small class="faded">{{ trans('settings.role_controlled_by_asset') }}</small></td>
+                <td>
+                    @include('settings.roles.parts.checkbox', ['permission' => 'annotation-update-own', 'label' => trans('settings.role_own')])
+                    <br>
+                    @include('settings.roles.parts.checkbox', ['permission' => 'annotation-update-all', 'label' => trans('settings.role_all')])
+                </td>
+                <td>
+                    @include('settings.roles.parts.checkbox', ['permission' => 'annotation-delete-own', 'label' => trans('settings.role_own')])
+                    <br>
+                    @include('settings.roles.parts.checkbox', ['permission' => 'annotation-delete-all', 'label' => trans('settings.role_all')])
+                </td>
+            </tr>
+            <tr>
+                <td>
                     <div>{{ trans('entities.comments') }}</div>
                     <a href="#" permissions-table-toggle-all-in-row class="text-small text-primary">{{ trans('common.toggle_all') }}</a>
                 </td>
