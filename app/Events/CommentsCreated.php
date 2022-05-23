@@ -26,7 +26,7 @@ class CommentsCreated implements ShouldBroadcast
 
     public function broadcastOn()
     {
-        return new Channel('http://event/comment');
+        return new Channel('http://event/comment', true);
     }
 
     public function broadcastAs()

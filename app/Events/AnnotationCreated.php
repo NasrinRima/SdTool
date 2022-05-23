@@ -24,7 +24,7 @@ class AnnotationCreated implements ShouldBroadcast
 
     public function broadcastOn()
     {
-        return new Channel('http://event/annotation');
+        return new Channel('http://event/annotation', true);
     }
 
     public function broadcastAs()
