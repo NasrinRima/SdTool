@@ -1,0 +1,9 @@
+stages:
+  - build
+  - package
+  - deploy
+
+include:
+  - '/.gitlab/build.yml'
+  - '/.gitlab/docker-package.yml'
+  - '/.gitlab/dev-deploy.yml'

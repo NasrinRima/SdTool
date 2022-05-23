@@ -1,0 +1,18 @@
+deploy:dev:
+  stage: deploy
+  variables:
+    GIT_STRATEGY: none
+  image: ronisaha/ssh-client
+  before_script:
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh-keyscan -t rsa $DEV_SERVER >> ~/.ssh/known_hosts
+  script:
+    - scp .docker/image/app.tar.gz $DEV_USER@$DEV_SERVER:$DEST_PATH/
+    - ssh $DEV_USER@$DEV_SERVER "$DEST_PATH/deploy.sh"
+  only:
+    - /^(dev|all)-.*$/
+  except:
+    - branches

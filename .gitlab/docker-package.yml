@@ -1,0 +1,22 @@
+build-docker:
+  stage: package
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [ "" ]
+  before_script:
+    - export APP_VERSION=$(echo $CI_COMMIT_REF_NAME | sed -E 's/(all-|dev-|qa-)?([^ ]*)$/\2/')-$CI_COMMIT_SHORT_SHA
+  script:
+    - >-
+      /kaniko/executor
+      --context "${CI_PROJECT_DIR}/.docker/image"
+      --dockerfile "${CI_PROJECT_DIR}/.docker/image/Dockerfile"
+      --destination "$PROJECT/$APP:$APP_VERSION"
+      --tarPath="${CI_PROJECT_DIR}/.docker/image/app.tar.gz"
+      --no-push
+    - ls ${CI_PROJECT_DIR}/.docker/image
+  artifacts:
+    name: "$CI_PROJECT_NAME-$CI_COMMIT_REF_NAME"
+    paths:
+      - .docker/image/app.tar.gz
+  only:
+    - tags

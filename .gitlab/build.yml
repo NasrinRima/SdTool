@@ -1,0 +1,27 @@
+build-tar:
+  stage: build
+  image: docker.bracits.com/hub/ronisaha/php-8.1-buster:cli
+  variables:
+    APP_ROOT_PATH: /
+  script:
+    - mkdir -p .composer
+    - COMPOSER_CACHE_DIR=.composer composer install --no-dev --prefer-dist --no-scripts
+    - export APP_VERSION=$(echo $CI_COMMIT_REF_NAME | sed -E 's/(all-|dev-|qa-)?([^ ]*)$/\2/')-$CI_COMMIT_SHORT_SHA
+    - echo "${APP_VERSION}" > version
+    - cat version
+    - npm install
+    - sed -i "s|APP_ROOT=[^ ]*|APP_ROOT=\'$APP_ROOT_PATH\'|g" .env
+    - sed -i "s|const APP_ROOT = [^ ]*|const APP_ROOT = '$APP_ROOT_PATH';|g" webpack.config.js
+    - npm run build
+    - tar -zcf .docker/image/code.tar.gz -X .docker/.buildexclude ./
+  artifacts:
+    expire_in: '1 day'
+    paths:
+      - .docker/image/code.tar.gz
+  cache:
+    paths:
+      - .composer
+      - vendor
+      - node_modules
+  only:
+    - tags
