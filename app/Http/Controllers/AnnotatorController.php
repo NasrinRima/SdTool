@@ -43,6 +43,7 @@ class AnnotatorController extends Controller
 
     public function save($revision, Request $request)
     {
+        $this->checkPermission('annotation-create-all');
         $data = json_decode($request->getContent(), true);
         $annotation = new Annotation();
         $annotation->page_revision_id = $revision;
@@ -62,6 +63,7 @@ class AnnotatorController extends Controller
     public function update($revision, $annotation, Request $request)
     {
         $annotationObj = Annotation::findOrFail($annotation);
+        $this->checkPermission('annotation-update-all');
         if (Auth::user()->id != $annotationObj->created_by) {
             throw new PermissionsException();
         }
@@ -77,6 +79,7 @@ class AnnotatorController extends Controller
     public function delete($revision, $annotation)
     {
         $annotationObj = Annotation::findOrFail($annotation);
+        $this->checkPermission('annotation-delete-all');
         if (Auth::user()->id != $annotationObj->created_by) {
             throw new PermissionsException();
         }
@@ -84,6 +87,7 @@ class AnnotatorController extends Controller
         $data = $this->annotationsRepo->toArray($annotationObj);
         $annotationObj->delete();
         AnnotationDeleted::dispatch($revision, $data);
+
         return new JsonResponse($data);
     }
 
