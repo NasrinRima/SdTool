@@ -36,7 +36,6 @@
     "backbone-extend-standalone": "^0.1.2",
     "clipboard": "^2.0.10",
     "codemirror": "^5.65.2",
-    "dot": "^1.1.2",
     "dropzone": "^5.9.3",
     "es6-promise": "^4.2.8",
     "eventsource-polyfill": "^0.9.6",
@@ -52,10 +51,5 @@
     "rxjs": "^7.5.5",
     "sortablejs": "^1.15.0",
     "toastr": "^2.1.4"
-  },
-  "browser": {
-    "fs": false,
-    "path": false,
-    "os": false
   }
 }
