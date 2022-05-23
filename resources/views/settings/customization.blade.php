@@ -109,11 +109,11 @@
                 </div>
             </div>
 
-            <div>
+       {{--     <div>
                 <label for="setting-app-privacy-link" class="setting-list-label">{{ trans('settings.app_footer_links') }}</label>
                 <p class="small mb-m">{{ trans('settings.app_footer_links_desc') }}</p>
                 @include('settings.parts.footer-links', ['name' => 'setting-app-footer-links', 'value' => setting('app-footer-links', [])])
-            </div>
+            </div>--}}
 
 
             <div>
