@@ -3,10 +3,10 @@
 namespace BookStack\Events;
 
 
-class CommentsUpdated extends CommentsCreated
+class CommentsDeleted extends CommentsCreated
 {
     public function broadcastAs()
     {
-        return 'event.comments.updated';
+        return 'event.comments.deleted';
     }
 }

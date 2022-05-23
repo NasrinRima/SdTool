@@ -42,7 +42,7 @@ EventBusService.on('event', 'comments.created')
             success: function (view) {
                 if (!$('div[comment="' + comment.data.id + '"]').length) {
                     $('.comment-container').append(view);
-                    window.components.init(document.querySelector('[comment= "'+ comment.data.id +'" ]'));
+                    window.components.init(document.querySelector('[comment= "' + comment.data.id + '" ]'));
                     updateCount();
                     $(".comments-list").append($(".comment-bar .comment-button"));
                     $(".comment-button").addClass("mb-xl");
@@ -60,16 +60,28 @@ EventBusService.on('event', 'comments.updated')
             type: "GET",
             dataType: "html",
             success: function (view) {
-                $('div[comment= "'+ comment.data.id +'" ]').replaceWith(view);
+                $('div[comment= "' + comment.data.id + '" ]').replaceWith(view);
             },
             error: function (error) {
             }
         });
     });
+EventBusService.on('event', 'comments.deleted')
+    .subscribe(comment => {
+        setTimeout(function () {
+            $('div[comment= "' + comment.data.id + '" ]').remove();
+            updateCount();
+            let count = document.getElementsByClassName('comment-container')[0].children.length;
+            if(!count){
+                $(".comment-bar").append($(".comment-button"));
+            }
+        }, 500);
+    });
 // Load Components
 import components from "./components"
 
 components();
+
 function updateCount() {
     let count = document.getElementsByClassName('comment-container')[0].children.length;
     const elem = document.querySelector("[component='page-comments']");
